@@ -72,10 +72,32 @@ function activateKirby() {
     speakSentence(adjData, advData);
 }
 
-// --- AZURE AI SPEECH ---
+// --- UPDATED SPEECH FUNCTION ---
 function speakSentence(adj, adv) {
-    const speechSDK = window.SpeechSDK;
-    const config = speechSDK.SpeechConfig.fromSubscription(speechConfig.key, speechConfig.region);
+    // 1. Check if Azure Key is missing
+    if (speechConfig.key === "PASTE_YOUR_AZURE_KEY_HERE" || speechConfig.key === "") {
+        console.log("No Azure Key found. Using Browser Backup Voice.");
+        
+        // Use standard Browser Voice
+        const utterance = new SpeechSynthesisUtterance();
+        
+        if (currentLang === 'en') {
+            utterance.text = `The ${adj.word} Kirby moves ${adv.word}.`;
+            utterance.lang = 'en-US';
+        } else if (currentLang === 'kr') {
+            utterance.text = `${adj.kr} 커비가 ${adv.kr} 움직여요.`;
+            utterance.lang = 'ko-KR';
+        } else if (currentLang === 'zh') {
+            utterance.text = `${adj.zh}卡比${adv.zh}移动。`;
+            utterance.lang = 'zh-CN';
+        }
+        
+        window.speechSynthesis.speak(utterance);
+        return; // Stop here, don't try to call Azure
+    }
+
+    // ... The rest of the Azure code stays here ...
+}
     
     // Choose Voice based on Language
     let textToSpeak = "";
