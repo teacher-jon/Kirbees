@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirby's Grammar Galaxy</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js"></script>
+</head>
+<body>
+
+    <div id="game-container">
+        <header>
+            <h1>Kirby's Grammar Galaxy</h1>
+            <div id="lang-toggle">
+                <button onclick="setLanguage('en')">English</button>
+                <button onclick="setLanguage('kr')">Korean</button>
+                <button onclick="setLanguage('zh')">Mandarin</button>
+            </div>
+        </header>
+
+        <div id="stage">
+            <div id="kirby" class="character"></div>
+            <div id="speech-bubble" class="hidden">...</div>
+        </div>
+
+        <div id="controls">
+            <p>Build your sentence:</p>
+            <div class="sentence-row">
+                <span>The</span>
+                <select id="adjective-select">
+                    </select>
+                <span>Kirby</span>
+                <select id="adverb-select">
+                    </select>
+                <span>eats the apple.</span>
+            </div>
+            
+            <button id="activate-btn" onclick="activateKirby()">Inhale & Speak!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
