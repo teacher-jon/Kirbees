@@ -1,0 +1,100 @@
+body {
+    font-family: 'Comic Sans MS', sans-serif;
+    background-color: #f0f8ff;
+    text-align: center;
+    margin: 0;
+}
+
+#game-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+#stage {
+    width: 100%;
+    height: 300px;
+    background-color: #87CEEB; /* Sky Blue */
+    position: relative;
+    border: 4px solid #333;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.character {
+    width: 100px;
+    height: 100px;
+    background-color: pink;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    transition: all 1s ease; /* Smooth animation */
+    border: 3px solid black;
+}
+
+/* Kirby's Eyes */
+.character::before {
+    content: "• •";
+    font-size: 40px;
+    color: black;
+    position: absolute;
+    top: 15px;
+    left: 25px;
+}
+
+/* Kirby's Mouth */
+.character::after {
+    content: "o";
+    font-size: 20px;
+    color: red;
+    position: absolute;
+    bottom: 25px;
+    left: 45px;
+}
+
+.hidden { display: none; }
+
+#controls {
+    background-color: #eee;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+select {
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+button {
+    background-color: #ff69b4; /* Hot Pink */
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover { background-color: #ff1493; }
+
+/* Dynamic Classes for Adjectives */
+.big { transform: scale(2); }
+.small { transform: scale(0.5); }
+.red { background-color: red; }
+.green { background-color: lightgreen; }
+
+/* Dynamic Classes for Adverbs (Animations) */
+@keyframes shake { 0% { left: 20px; } 50% { left: 40px; } 100% { left: 20px; } }
+@keyframes bounce { 0%, 100% { bottom: 20px; } 50% { bottom: 150px; } }
+
+.quickly { transition: all 0.2s !important; left: 600px !important; }
+.slowly { transition: all 3s !important; left: 600px !important; }
+.high { animation: bounce 1s infinite; }
