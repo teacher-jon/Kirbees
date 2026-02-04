@@ -6,6 +6,7 @@
     <title>Kirby's Grammar Galaxy</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/microsoft-cognitiveservices-speech-sdk@latest/distrib/browser/microsoft.cognitiveservices.speech.sdk.bundle-min.js"></script>
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
 </head>
 <body>
 
@@ -20,7 +21,9 @@
         </header>
 
         <div id="stage">
-            <div id="kirby" class="character"></div>
+            <model-viewer id="kirby" class="character" src="kirby.glb" 
+         alt="A 3D Kirby" auto-rotate camera-controls disable-zoom>
+           </model-viewer>
             <div id="speech-bubble" class="hidden">...</div>
         </div>
 
