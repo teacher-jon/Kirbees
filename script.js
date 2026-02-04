@@ -10,7 +10,9 @@ const vocab = {
         { word: "Big", kr: "큰", zh: "巨大的", class: "big" },
         { word: "Small", kr: "작은", zh: "小小的", class: "small" },
         { word: "Red", kr: "빨간", zh: "红色的", class: "red" },
-        { word: "Green", kr: "초록색", zh: "绿色的", class: "green" }
+        { word: "Green", kr: "초록색", zh: "绿色的", class: "green" },
+        { word: "Heavy", kr: "무거운", zh: "沉重的", class: "heavy" },
+        { word: "Light", kr: "가벼운", zh: "轻盈的", class: "light" }
     ],
     adverbs: [
         { word: "Quickly", kr: "빨리", zh: "快速地", class: "quickly" },
