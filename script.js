@@ -60,6 +60,13 @@ function activateKirby() {
     const adjData = JSON.parse(document.getElementById('adjective-select').value);
     const advData = JSON.parse(document.getElementById('adverb-select').value);
     const kirby = document.getElementById('kirby');
+    
+
+    // If your model has an animation named 'run'
+    if (advData.word === "Quickly") {
+    kirby3D.animationName = "run";
+    kirby3D.play();
+}
 
     // 2. Reset Kirby
     kirby.className = 'character'; 
@@ -78,6 +85,8 @@ function activateKirby() {
     // 5. Construct the Sentence & Speak
     speakSentence(adjData, advData);
 }
+
+
 
 // --- UPDATED SPEECH FUNCTION ---
 function speakSentence(adj, adv) {
