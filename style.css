@@ -98,3 +98,56 @@ button:hover { background-color: #ff1493; }
 .quickly { transition: all 0.2s !important; left: 600px !important; }
 .slowly { transition: all 3s !important; left: 600px !important; }
 .high { animation: bounce 1s infinite; }
+
+/* --- WORLD 1 ADJECTIVES (The Look) --- */
+
+/* Heavy: Squishes Kirby down and makes him look dense */
+.heavy { 
+    transform: scale(1.2, 0.8); 
+    background-color: #555 !important; /* Dark Grey */
+    border: 5px solid black;
+}
+
+/* Light: Makes Kirby float up and look airy */
+.light { 
+    transform: translateY(-50px); 
+    background-color: #E0FFFF !important; /* Light Cyan */
+    opacity: 0.8; 
+}
+
+/* Hard: Makes Kirby look like a square block */
+.hard { 
+    border-radius: 0% !important; /* Turns circle into square */
+    background-color: #8B4513 !important; /* Wood/Rock color */
+}
+
+/* Soft: Makes Kirby look fluffy/blurry */
+.soft { 
+    filter: blur(2px);
+    background-color: pink !important;
+}
+
+/* --- WORLD 1 ADVERBS (The Action) --- */
+
+/* Quietly: Kirby becomes semi-transparent (Ghost mode) */
+.quietly { 
+    opacity: 0.3; 
+    transition: opacity 2s ease;
+}
+
+/* Easily: Kirby does a little victory spin */
+@keyframes spin { 100% { transform: rotate(360deg); } }
+.easily { 
+    animation: spin 1s linear infinite; 
+}
+
+/* Low: Kirby moves along the bottom edge */
+.low { 
+    bottom: 0px !important;
+}
+
+/* Quickly: Zips across the screen */
+.quickly {
+    left: 80% !important;
+    transition: left 0.5s ease-in !important; /* Fast! */
+}
