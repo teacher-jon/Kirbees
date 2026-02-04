@@ -1,153 +1,148 @@
-body {
-    font-family: 'Comic Sans MS', sans-serif;
-    background-color: #f0f8ff;
-    text-align: center;
-    margin: 0;
+// --- CONFIGURATION ---
+const speechConfig = {
+    key: "PASTE_YOUR_AZURE_KEY_HERE", 
+    region: "chinaeast2" 
+};
+
+// --- VOCABULARY LIST ---
+const vocab = {
+    adjectives: [
+        { word: "Big", kr: "큰", zh: "巨大的", class: "big" },
+        { word: "Small", kr: "작은", zh: "小小的", class: "small" },
+        { word: "Heavy", kr: "무거운", zh: "沉重的", class: "heavy" },
+        { word: "Light", kr: "가벼운", zh: "轻盈的", class: "light" },
+        { word: "Red", kr: "빨간", zh: "红色的", class: "red" },
+        { word: "Green", kr: "초록", zh: "绿色的", class: "green" },
+        { word: "Hard", kr: "단단한", zh: "坚硬的", class: "hard" },
+        { word: "Soft", kr: "부드러운", zh: "柔软的", class: "soft" }
+    ],
+    adverbs: [
+        { word: "Quickly", kr: "빨리", zh: "快速地", class: "quickly" },
+        { word: "Slowly", kr: "천천히", zh: "慢慢地", class: "slowly" },
+        { word: "High", kr: "높게", zh: "高高地", class: "high" },
+        { word: "Low", kr: "낮게", zh: "低低地", class: "low" },
+        { word: "Quietly", kr: "조용히", zh: "安静地", class: "quietly" },
+        { word: "Easily", kr: "쉽게", zh: "容易地", class: "easily" }
+    ]
+};
+
+let currentLang = 'en';
+
+// --- SETUP ON LOAD ---
+window.onload = function() {
+    const adjSelect = document.getElementById('adjective-select');
+    const advSelect = document.getElementById('adverb-select');
+
+    // Fill the dropdown menus
+    vocab.adjectives.forEach(adj => {
+        let opt = document.createElement('option');
+        opt.value = JSON.stringify(adj);
+        opt.innerText = adj.word;
+        adjSelect.appendChild(opt);
+    });
+
+    vocab.adverbs.forEach(adv => {
+        let opt = document.createElement('option');
+        opt.value = JSON.stringify(adv);
+        opt.innerText = adv.word;
+        advSelect.appendChild(opt);
+    });
+};
+
+function setLanguage(lang) {
+    currentLang = lang;
+    alert("Language set to: " + lang.toUpperCase());
 }
 
-#game-container {
-    max-width: 800px;
-    margin: 20px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+// --- MAIN GAME LOGIC ---
+function activateKirby() {
+    // 1. Get chosen words
+    const adjData = JSON.parse(document.getElementById('adjective-select').value);
+    const advData = JSON.parse(document.getElementById('adverb-select').value);
+    const kirby = document.getElementById('kirby');
+
+    // 2. Play Animation (If the model has one named 'Run')
+    // We check if the 3D model supports animations first
+    if (kirby.availableAnimations && kirby.availableAnimations.includes("Run")) {
+         if (advData.word === "Quickly") {
+             kirby.animationName = "Run";
+             kirby.play();
+         }
+    }
+
+    // 3. Reset Kirby CSS
+    kirby.className = 'character'; 
+    // We use a small timeout to force the browser to recognize the reset
+    setTimeout(() => {
+        // 4. Apply Visual Effects (Adjectives)
+        kirby.classList.add(adjData.class);
+        
+        // 5. Apply Movement (Adverbs)
+        kirby.classList.add(advData.class);
+    }, 50);
+
+    // 6. Construct the Sentence & Speak
+    speakSentence(adjData, advData);
 }
 
-#stage {
-    width: 100%;
-    height: 300px;
-    background-color: #87CEEB; /* Sky Blue */
-    position: relative;
-    border: 4px solid #333;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-bottom: 20px;
-}
+// --- SPEECH FUNCTION ---
+function speakSentence(adj, adv) {
+    // 1. Check if Azure Key is missing
+    if (speechConfig.key === "PASTE_YOUR_AZURE_KEY_HERE" || speechConfig.key === "") {
+        console.log("No Azure Key found. Using Browser Backup Voice.");
+        
+        const utterance = new SpeechSynthesisUtterance();
+        
+        if (currentLang === 'en') {
+            utterance.text = `The ${adj.word} Kirby moves ${adv.word}.`;
+            utterance.lang = 'en-US';
+        } else if (currentLang === 'kr') {
+            utterance.text = `${adj.kr} 커비가 ${adv.kr} 움직여요.`;
+            utterance.lang = 'ko-KR';
+        } else if (currentLang === 'zh') {
+            utterance.text = `${adj.zh}卡比${adv.zh}移动。`;
+            utterance.lang = 'zh-CN';
+        }
+        
+        window.speechSynthesis.speak(utterance);
+        return; // Stop here, don't try to call Azure
+    }
 
-.character {
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    transition: all 1s ease;
-    /* Remove the pink background and border from the old circle! */
-    background-color: transparent !important;
-    border: none !important;
-}
+    // 2. AZURE SETUP (Only runs if Key exists)
+    const speechSDK = window.SpeechSDK;
+    const config = speechSDK.SpeechConfig.fromSubscription(speechConfig.key, speechConfig.region);
+    
+    let textToSpeak = "";
+    let voiceName = "";
 
-/* Kirby's Eyes */
-.character::before {
-    content: "• •";
-    font-size: 40px;
-    color: black;
-    position: absolute;
-    top: 15px;
-    left: 25px;
-}
+    if (currentLang === 'en') {
+        textToSpeak = `The ${adj.word} Kirby moves ${adv.word}.`;
+        voiceName = "en-US-AnaNeural";
+    } else if (currentLang === 'kr') {
+        textToSpeak = `${adj.kr} 커비가 ${adv.kr} 움직여요.`;
+        voiceName = "ko-KR-SunHiNeural";
+    } else if (currentLang === 'zh') {
+        textToSpeak = `${adj.zh}卡比${adv.zh}移动。`;
+        voiceName = "zh-CN-XiaoxiaoNeural";
+    }
 
-/* Kirby's Mouth */
-.character::after {
-    content: "o";
-    font-size: 20px;
-    color: red;
-    position: absolute;
-    bottom: 25px;
-    left: 45px;
-}
+    config.speechSynthesisVoiceName = voiceName;
+    
+    const synthesizer = new speechSDK.SpeechSynthesizer(config);
 
-.hidden { display: none; }
-
-#controls {
-    background-color: #eee;
-    padding: 20px;
-    border-radius: 10px;
-}
-
-select {
-    padding: 10px;
-    font-size: 18px;
-    border-radius: 5px;
-    margin: 0 5px;
-}
-
-button {
-    background-color: #ff69b4; /* Hot Pink */
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    font-size: 20px;
-    border-radius: 50px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-button:hover { background-color: #ff1493; }
-
-/* Dynamic Classes for Adjectives */
-.big { transform: scale(2); }
-.small { transform: scale(0.5); }
-.red { background-color: red; }
-.green { background-color: lightgreen; }
-
-/* Dynamic Classes for Adverbs (Animations) */
-@keyframes shake { 0% { left: 20px; } 50% { left: 40px; } 100% { left: 20px; } }
-@keyframes bounce { 0%, 100% { bottom: 20px; } 50% { bottom: 150px; } }
-
-.quickly { transition: all 0.2s !important; left: 600px !important; }
-.slowly { transition: all 3s !important; left: 600px !important; }
-.high { animation: bounce 1s infinite; }
-
-/* --- WORLD 1 ADJECTIVES (The Look) --- */
-
-/* Heavy: Squishes Kirby down and makes him look dense */
-.heavy { 
-    transform: scale(1.2, 0.8); 
-    background-color: #555 !important; /* Dark Grey */
-    border: 5px solid black;
-}
-
-/* Light: Makes Kirby float up and look airy */
-.light { 
-    transform: translateY(-50px); 
-    background-color: #E0FFFF !important; /* Light Cyan */
-    opacity: 0.8; 
-}
-
-/* Hard: Makes Kirby look like a square block */
-.hard { 
-    border-radius: 0% !important; /* Turns circle into square */
-    background-color: #8B4513 !important; /* Wood/Rock color */
-}
-
-/* Soft: Makes Kirby look fluffy/blurry */
-.soft { 
-    filter: blur(2px);
-    background-color: pink !important;
-}
-
-/* --- WORLD 1 ADVERBS (The Action) --- */
-
-/* Quietly: Kirby becomes semi-transparent (Ghost mode) */
-.quietly { 
-    opacity: 0.3; 
-    transition: opacity 2s ease;
-}
-
-/* Easily: Kirby does a little victory spin */
-@keyframes spin { 100% { transform: rotate(360deg); } }
-.easily { 
-    animation: spin 1s linear infinite; 
-}
-
-/* Low: Kirby moves along the bottom edge */
-.low { 
-    bottom: 0px !important;
-}
-
-/* Quickly: Zips across the screen */
-.quickly {
-    left: 80% !important;
-    transition: left 0.5s ease-in !important; /* Fast! */
+    synthesizer.speakTextAsync(
+        textToSpeak,
+        result => {
+            if (result.reason === speechSDK.ResultReason.SynthesizingAudioCompleted) {
+                console.log("Speech working!");
+            } else {
+                console.error(result.errorDetails);
+            }
+            synthesizer.close();
+        },
+        error => {
+            console.error(error);
+            synthesizer.close();
+        }
+    );
 }
