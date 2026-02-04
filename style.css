@@ -26,15 +26,15 @@ body {
 }
 
 .character {
-    width: 100px;
-    height: 100px;
-    background-color: pink;
-    border-radius: 50%;
+    width: 150px;
+    height: 150px;
     position: absolute;
     bottom: 20px;
     left: 20px;
-    transition: all 1s ease; /* Smooth animation */
-    border: 3px solid black;
+    transition: all 1s ease;
+    /* Remove the pink background and border from the old circle! */
+    background-color: transparent !important;
+    border: none !important;
 }
 
 /* Kirby's Eyes */
