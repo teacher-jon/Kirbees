@@ -9,15 +9,20 @@ const vocab = {
     adjectives: [
         { word: "Big", kr: "큰", zh: "巨大的", class: "big" },
         { word: "Small", kr: "작은", zh: "小小的", class: "small" },
-        { word: "Red", kr: "빨간", zh: "红色的", class: "red" },
-        { word: "Green", kr: "초록색", zh: "绿色的", class: "green" },
         { word: "Heavy", kr: "무거운", zh: "沉重的", class: "heavy" },
-        { word: "Light", kr: "가벼운", zh: "轻盈的", class: "light" }
+        { word: "Light", kr: "가벼운", zh: "轻盈的", class: "light" },
+        { word: "Red", kr: "빨간", zh: "红色的", class: "red" },
+        { word: "Green", kr: "초록", zh: "绿色的", class: "green" },
+        { word: "Hard", kr: "단단한", zh: "坚硬的", class: "hard" },
+        { word: "Soft", kr: "부드러운", zh: "柔软的", class: "soft" }
     ],
     adverbs: [
         { word: "Quickly", kr: "빨리", zh: "快速地", class: "quickly" },
         { word: "Slowly", kr: "천천히", zh: "慢慢地", class: "slowly" },
-        { word: "High", kr: "높게", zh: "高高地", class: "high" }
+        { word: "High", kr: "높게", zh: "高高地", class: "high" },
+        { word: "Low", kr: "낮게", zh: "低低地", class: "low" },
+        { word: "Quietly", kr: "조용히", zh: "安静地", class: "quietly" },
+        { word: "Easily", kr: "쉽게", zh: "容易地", class: "easily" }
     ]
 };
 
