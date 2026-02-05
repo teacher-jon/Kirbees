@@ -4,6 +4,12 @@ const speechConfig = {
     region: "chinaeast2" 
 };
 
+// --- GAME SETTINGS (The Mission) ---
+const currentMission = {
+    targetWord: "Quickly", // The word the student MUST pick to win
+    successMessage: "Great job! Kirby reached the apple!"
+};
+
 // --- VOCABULARY LIST ---
 const vocab = {
     adjectives: [
@@ -54,30 +60,59 @@ function setLanguage(lang) {
     alert("Language set to: " + lang.toUpperCase());
 }
 
-// --- MAIN GAME LOGIC (SAFE MODE) ---
+// --- MAIN GAME LOGIC (WITH WIN/LOSS) ---
 function activateKirby() {
-    // 1. Get chosen words
+    // 1. Get chosen words & Elements
     const adjData = JSON.parse(document.getElementById('adjective-select').value);
     const advData = JSON.parse(document.getElementById('adverb-select').value);
     const kirby = document.getElementById('kirby');
+    const goal = document.getElementById('goal');
 
-    // 2. Reset Kirby (Move back to start)
-    kirby.className = 'character'; 
+    // 2. Reset Position (Instant)
+    kirby.style.transition = 'none'; 
     kirby.style.left = '20px'; 
+    goal.style.display = 'block'; // Bring apple back if it was eaten
     
-    // 3. Apply Visual Effects & Movement
-    // We wait 50ms so the browser sees the reset happen first
+    // 3. The Gameplay Loop
     setTimeout(() => {
-        // Apply the Visuals (Big, Red, etc.)
-        kirby.classList.add(adjData.class);
-        
-        // Apply the Movement (Sliding across screen)
-        // This slides the whole model, so it looks like he is gliding!
-        kirby.classList.add(advData.class);
-    }, 50);
+        kirby.style.transition = 'all 2s ease'; // Turn movement back on
 
-    // 4. Construct the Sentence & Speak
-    speakSentence(adjData, advData);
+        // Apply Visual Size/Color (Big, Small, etc.)
+        kirby.classList.add(adjData.class);
+
+        // --- CHECK: DID THEY WIN? ---
+        if (advData.word === currentMission.targetWord) {
+            // *** WINNER ***
+            // Move Kirby all the way to the Apple (Right side)
+            kirby.style.left = '650px'; 
+            
+            // Speak the Sentence
+            speakSentence(adjData, advData);
+            
+            // Trigger Confetti!
+            if (window.confetti) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+            
+            // Eat the Apple after 2 seconds
+            setTimeout(() => {
+                goal.style.display = 'none'; 
+            }, 2000);
+
+        } else {
+            // *** TRY AGAIN ***
+            // Kirby only moves a little bit (stuck)
+            kirby.style.left = '100px';
+            
+            // Shake effect
+            kirby.classList.add('shake');
+            setTimeout(() => kirby.classList.remove('shake'), 500);
+
+            // Hint
+            console.log("Wrong answer. Try again!");
+        }
+
+    }, 100);
 }
 
 // --- SPEECH FUNCTION ---
