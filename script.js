@@ -1,7 +1,7 @@
 // --- CONFIGURATION ---
 const speechConfig = {
-    key: "PASTE_YOUR_AZURE_KEY_HERE", // <--- PASTE KEY INSIDE QUOTES
-    region: "chinaeast2" // Use 'chinaeast2' or 'chinanorth2' for 21Vianet
+    key: "PASTE_YOUR_AZURE_KEY_HERE", 
+    region: "chinaeast2" 
 };
 
 // --- VOCABULARY LIST ---
@@ -54,43 +54,38 @@ function setLanguage(lang) {
     alert("Language set to: " + lang.toUpperCase());
 }
 
-// --- MAIN GAME LOGIC ---
+// --- MAIN GAME LOGIC (SAFE MODE) ---
 function activateKirby() {
     // 1. Get chosen words
     const adjData = JSON.parse(document.getElementById('adjective-select').value);
     const advData = JSON.parse(document.getElementById('adverb-select').value);
     const kirby = document.getElementById('kirby');
 
-    // 2. STOP! Don't look for animations yet.
-    // We just skip the 'kirby.play()' part for now.
-    
-    // 3. Reset Kirby's Position & Look
+    // 2. Reset Kirby (Move back to start)
     kirby.className = 'character'; 
-    kirby.style.left = '20px'; // Move back to start
+    kirby.style.left = '20px'; 
     
-    // 4. Trigger the Action (Sliding/Growing/etc.)
+    // 3. Apply Visual Effects & Movement
     // We wait 50ms so the browser sees the reset happen first
     setTimeout(() => {
         // Apply the Visuals (Big, Red, etc.)
         kirby.classList.add(adjData.class);
         
         // Apply the Movement (Sliding across screen)
-        // This moves the WHOLE model, so it looks like he is gliding.
+        // This slides the whole model, so it looks like he is gliding!
         kirby.classList.add(advData.class);
     }, 50);
 
-    // 5. Speak the Sentence
+    // 4. Construct the Sentence & Speak
     speakSentence(adjData, advData);
 }
 
-
-// --- UPDATED SPEECH FUNCTION ---
+// --- SPEECH FUNCTION ---
 function speakSentence(adj, adv) {
     // 1. Check if Azure Key is missing
     if (speechConfig.key === "PASTE_YOUR_AZURE_KEY_HERE" || speechConfig.key === "") {
         console.log("No Azure Key found. Using Browser Backup Voice.");
         
-        // Use standard Browser Voice
         const utterance = new SpeechSynthesisUtterance();
         
         if (currentLang === 'en') {
@@ -105,13 +100,13 @@ function speakSentence(adj, adv) {
         }
         
         window.speechSynthesis.speak(utterance);
-        return; // Stop here, don't try to call Azure
+        return; 
     }
 
-    // ... The rest of the Azure code stays here ...
-}
+    // 2. AZURE SETUP
+    const speechSDK = window.SpeechSDK;
+    const config = speechSDK.SpeechConfig.fromSubscription(speechConfig.key, speechConfig.region);
     
-    // Choose Voice based on Language
     let textToSpeak = "";
     let voiceName = "";
 
@@ -127,10 +122,8 @@ function speakSentence(adj, adv) {
     }
 
     config.speechSynthesisVoiceName = voiceName;
-    
     const synthesizer = new speechSDK.SpeechSynthesizer(config);
 
-    // Speak!
     synthesizer.speakTextAsync(
         textToSpeak,
         result => {
