@@ -60,32 +60,28 @@ function activateKirby() {
     const adjData = JSON.parse(document.getElementById('adjective-select').value);
     const advData = JSON.parse(document.getElementById('adverb-select').value);
     const kirby = document.getElementById('kirby');
+
+    // 2. STOP! Don't look for animations yet.
+    // We just skip the 'kirby.play()' part for now.
     
-
-    // If your model has an animation named 'run'
-    if (advData.word === "Quickly") {
-    kirby3D.animationName = "run";
-    kirby3D.play();
-}
-
-    // 2. Reset Kirby
+    // 3. Reset Kirby's Position & Look
     kirby.className = 'character'; 
-    kirby.style.left = '20px'; // Reset position
+    kirby.style.left = '20px'; // Move back to start
     
-    // 3. Apply Visual Effects (Adjectives)
-    // We wait 10ms to let the browser process the reset, then add the new class
+    // 4. Trigger the Action (Sliding/Growing/etc.)
+    // We wait 50ms so the browser sees the reset happen first
     setTimeout(() => {
+        // Apply the Visuals (Big, Red, etc.)
         kirby.classList.add(adjData.class);
         
-        // 4. Apply Movement (Adverbs)
-        // We trigger the movement class
+        // Apply the Movement (Sliding across screen)
+        // This moves the WHOLE model, so it looks like he is gliding.
         kirby.classList.add(advData.class);
     }, 50);
 
-    // 5. Construct the Sentence & Speak
+    // 5. Speak the Sentence
     speakSentence(adjData, advData);
 }
-
 
 
 // --- UPDATED SPEECH FUNCTION ---
