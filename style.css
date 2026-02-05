@@ -171,12 +171,50 @@ function speakSentence(adj, adv) {
     );
         /* --- LEVEL 1 GAME STUFF (Apple & Missions) --- */
 
+/* --- THE STAGE (World 1: Green Greens) --- */
+#stage {
+    width: 100%;
+    height: 400px; /* Taller stage */
+    /* A nice sky gradient instead of flat blue */
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F7FA 80%, #90EE90 80%, #228B22 100%);
+    position: relative;
+    border: 8px solid #4a90e2; /* Cartoon border */
+    border-radius: 20px;
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.1); /* Inner shadow for depth */
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* --- THE GOAL (The Bouncing Apple) --- */
 #goal {
-    font-size: 80px;
+    font-size: 100px; /* MASSIVE APPLE */
     position: absolute;
-    bottom: 20px;
-    right: 20px; /* Puts the apple in the far corner */
-    filter: drop-shadow(0 0 10px white); /* Makes it glow */
+    bottom: 50px; /* Sitting on the "grass" line */
+    right: 50px; 
+    filter: drop-shadow(0 10px 10px rgba(0,0,0,0.3));
+    z-index: 5;
+    /* Let's make it float up and down! */
+    animation: float 2s ease-in-out infinite;
+    cursor: pointer;
+}
+
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+/* --- THE MISSION SIGN --- */
+#mission-box {
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black box */
+    padding: 10px 20px;
+    border-radius: 0 0 15px 15px;
+    display: inline-block;
+    color: #FFD700; /* Gold text */
+    font-size: 28px;
+    border: 2px solid white;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
 }
 
 #mission-box {
@@ -203,4 +241,53 @@ function speakSentence(adj, adv) {
 .shake {
     animation: shake-anim 0.5s;
     border: 4px solid red !important; /* Red warning box */
+}
+                /* --- THE CONTROLS (Puzzle Piece Look) --- */
+.sentence-row {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* The Dropdown Menus */
+select {
+    padding: 15px;
+    font-size: 20px;
+    border: 3px solid #ff69b4; /* Pink border */
+    background-color: white;
+    border-radius: 15px;
+    color: #333;
+    cursor: pointer;
+    font-weight: bold;
+    box-shadow: 0 4px 0 #ff1493; /* A "3D" button bottom */
+    transition: all 0.1s;
+}
+
+select:active {
+    transform: translateY(4px); /* Pushes down when clicked */
+    box-shadow: none;
+}
+
+/* The Big Button */
+#activate-btn {
+    background: linear-gradient(to bottom, #ff69b4, #ff1493);
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    font-size: 28px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border: 4px solid white;
+    box-shadow: 0 8px 20px rgba(255, 20, 147, 0.4);
+    transform: scale(1);
+    transition: transform 0.2s;
+}
+
+#activate-btn:hover {
+    transform: scale(1.05) rotate(-1deg); /* Wiggles slightly on hover */
 }
