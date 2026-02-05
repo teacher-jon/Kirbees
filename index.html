@@ -10,24 +10,20 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="main-wrapper">
         <header>
             <h1>Kirby's Grammar Galaxy</h1>
         </header>
-
         <div id="stage">
             <div id="mission-wrapper">
                 <div id="mission-box">Mission: Run <b>Quickly</b>!</div>
             </div>
-
-            <model-viewer id="kirby" class="character" src="assets/idle.glb" 
-                alt="Kirby" disable-zoom camera-controls="false" auto-rotate>
+            <model-viewer id="kirby" class="character" src="assets/kirby.glb" 
+                alt="Kirby" disable-zoom camera-controls="false" auto-rotate
+                poster="https://modelviewer.dev/assets/poster-astronaut.png" loading="eager">
             </model-viewer>
-            
             <div id="goal">🍎</div>
         </div>
-
         <div id="controls">
             <div class="sentence-row">
                 <span class="text-part">The</span>
@@ -36,11 +32,9 @@
                 <select id="adverb-select"></select>
                 <span class="text-part">eats the apple.</span>
             </div>
-            
             <button id="activate-btn" onclick="activateKirby()">Inhale & Speak!</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
